@@ -31,13 +31,17 @@ class DaoLibroFireBase : InterfaceDaoLibro {
         conexion.collection("libros")
             .get()
             .addOnSuccessListener { querySnapshot ->
+
                 for (document in querySnapshot) {
                     val librillo = document.toObject(Libro::class.java)
                     libros.add(librillo)
                 }
                 libros.forEach {
-                    Log.d("firebas",it.idLibroFB)
+                    Log.d("firebase",it.idLibroFB+"--"+it.titulo)
                 }
+            }
+            .addOnFailureListener { exception ->
+                // Maneja el error
             }
         return libros
     }

@@ -18,7 +18,7 @@ class ServiceModelView(application: Application): AndroidViewModel(application),
     private lateinit var libros:MutableList<Libro>
     private lateinit var libro:Libro
 
-    fun createService(tipoBD:String){
+    fun createService(){
         firebase = BDFireBase()
         conex = firebase.conexion
 
