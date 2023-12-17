@@ -23,12 +23,28 @@ class DaoLibroFireBase : InterfaceDaoLibro {
     }
 
     override fun getLibro(titulo: String): Libro {
-        TODO("Not yet implemented")
+        var librillo : Libro = Libro()
+        conexion.collection("libros")
+            .whereEqualTo("titulo", titulo)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    librillo = document.toObject(Libro::class.java)
+                    Log.d("GetOne",librillo.titulo)
+                    Log.d("TAG", "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("TAG", "Error getting documents: ", exception)
+            }
+        return librillo
     }
 
-    override fun getLibros(): MutableList<Libro> {
-        var libros : MutableList<Libro> = mutableListOf()
+    override fun getLibrosAutor(autor: String): MutableList<Libro> {
+        var libros:MutableList<Libro> = mutableListOf()
+
         conexion.collection("libros")
+            .whereEqualTo("autor", autor)
             .get()
             .addOnSuccessListener { querySnapshot ->
 
@@ -46,12 +62,84 @@ class DaoLibroFireBase : InterfaceDaoLibro {
         return libros
     }
 
+    override fun getLibros(): MutableList<Libro> {
+        /*var libros : MutableList<Libro> = mutableListOf()
+        conexion.collection("libros")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+
+                for (document in querySnapshot) {
+                    val librillo = document.toObject(Libro::class.java)
+                    libros.add(librillo)
+                }
+                libros.forEach {
+                    Log.d("firebase",it.idLibroFB+"--"+it.titulo)
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Maneja el error
+            }
+        return libros*/
+
+        /*var  libros:MutableList<Libro> = mutableListOf()
+        conexion.collection("libros")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result) {
+                        val librillo = document.toObject(Libro::class.java)
+                        librillo.idLibroFB=document.id
+                        libros.add(librillo)
+                    }
+                    libros.forEach {
+                        Log.d("firebase",it.idLibroFB+"--"+it.titulo)
+                    }
+                }
+                else {
+                    Log.d("firebase", "Error al obtener documentos.", task.exception)
+                }
+            }
+        //return libros*/
+
+        var libros : MutableList<Libro> = mutableListOf()
+
+        conexion.collection("libros")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+
+                for (document in querySnapshot) {
+                    val librillo = document.toObject(Libro::class.java)
+                    libros.add(librillo)
+                }
+                libros.forEach {
+                    Log.d("firebase",it.idLibroFB+"--"+it.titulo)
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Maneja el error
+            }
+        return libros
+
+
+    }
+
     override fun updateLibro(li: Libro) {
-        TODO("Not yet implemented")
+        val datosActualizados = mapOf(
+            "autor" to li.autor
+        )
+        conexion.collection("libros").document(li.idLibroFB)
+            .update(datosActualizados)
+            .addOnSuccessListener { documentReference ->
+                Log.d("TAG", "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
     }
 
     override fun deleteLibro(li: Libro) {
-        TODO("Not yet implemented")
+        conexion.collection("libros").document(li.idLibroFB)
+            .delete()
+            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w("TAG", "Error deleting document", e) }
     }
 
     fun createConexion(bd : BDFireBase) {

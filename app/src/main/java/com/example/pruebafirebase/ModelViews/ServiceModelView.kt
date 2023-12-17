@@ -36,6 +36,10 @@ class ServiceModelView(application: Application): AndroidViewModel(application),
         return daoLibro.getLibro(titulo)
     }
 
+    override fun getLibrosAutor(autor: String): MutableList<Libro> {
+        return daoLibro.getLibrosAutor(autor)
+    }
+
     override fun getLibros(): MutableList<Libro> {
         return daoLibro.getLibros()
     }
