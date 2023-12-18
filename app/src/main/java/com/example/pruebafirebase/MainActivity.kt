@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         //anadirDatos()
         //recogerDatos()
-        //update()
+        update()
         //borrarDatos()
         getOne()
         //recogerDatosAutor()
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun update() {
-        var librillo = Libro("Pepe hillo","Rebecca Navarrosa")
+        var librillo = svm.getLibro("Alas de Sangre")
         svm.updateLibro(librillo)
     }
 
@@ -49,12 +49,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun anadirDatos() {
-        /*var libro1 = Libro("El problema final","Arturo Perez Reverte")
+        var libro1 = Libro("El problema final","Arturo Perez Reverte")
         var libro2 = Libro("El imperio final","Brandon Sanderson")
         var libro3 = Libro("La leyenda del hechicero","Taran Matharu")
         svm.addLibro(libro1)
         svm.addLibro(libro2)
-        svm.addLibro(libro3)*/
+        svm.addLibro(libro3)
         var libroUltimo = Libro("Alas de Sangre","Rebeca Yarros")
         svm.addLibro(libroUltimo)
 

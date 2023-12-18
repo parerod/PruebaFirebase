@@ -15,6 +15,14 @@ class DaoLibroFireBase : InterfaceDaoLibro {
         conexion.collection("libros")
             .add(li)
             .addOnSuccessListener { documentReference ->
+                li.idLibroFB = documentReference.id
+
+                documentReference.update("idLibroFB",li.idLibroFB)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("TAG", "DocumentSnapshot successfully updated!")
+                    }
+                    .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
+
                 Log.d("firebase", "DocumentSnapshot written with ID: ${documentReference.id}")
             }
             .addOnFailureListener { e ->
@@ -30,7 +38,7 @@ class DaoLibroFireBase : InterfaceDaoLibro {
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     librillo = document.toObject(Libro::class.java)
-                    Log.d("GetOne",librillo.titulo)
+                    Log.d("GetOne",librillo.titulo!!)
                     Log.d("TAG", "${document.id} => ${document.data}")
                 }
             }
@@ -125,7 +133,7 @@ class DaoLibroFireBase : InterfaceDaoLibro {
 
     override fun updateLibro(li: Libro) {
         val datosActualizados = mapOf(
-            "autor" to li.autor
+            "autor" to "Rebecca Torres"
         )
         conexion.collection("libros").document(li.idLibroFB)
             .update(datosActualizados)
